@@ -286,9 +286,54 @@ img{
     font-weight:bold;
 }
 
+.busca{
+    margin:20px 0;
+    text-align:center;
+}
+
+.busca input{
+    width:80%;
+    max-width:600px;
+    padding:10px 14px;
+    border-radius:20px;
+    border:1px solid #aaa;
+    font-size:1em;
+}
+
+.busca input:focus{
+    outline:none;
+    border-color:#003366;
+}
+
 </style>
 
 </head>
+
+<script>
+
+function buscar(){
+
+    let termo = document
+        .getElementById("campoBusca")
+        .value
+        .toLowerCase();
+
+    let itens = document.querySelectorAll(".item");
+
+    itens.forEach(function(item){
+
+        let texto = item.innerText.toLowerCase();
+
+        if(texto.includes(termo)){
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
+        }
+
+    });
+}
+
+</script>
 
 <body>
 
@@ -329,7 +374,7 @@ Viçosa, Minas Gerais, Brazil
 </div>
 
 <div class="geracao">
-Gerado em / Generado el / Generated on: 21/07/2026 23:03 (GMT−3)
+Gerado em / Generado el / Generated on: 21/07/2026 23:06 (GMT−3)
 </div>
 
 </header>
@@ -348,6 +393,15 @@ Gerado em / Generado el / Generated on: 21/07/2026 23:03 (GMT−3)
 <a href="#sexta">31/07 (Sexta-feira / Viernes / Friday)</a>
 
 </nav>
+
+<div class="busca">
+    <input
+        type="text"
+        id="campoBusca"
+        placeholder="Buscar título, autor, instituição..."
+        onkeyup="buscar()"
+    >
+</div>
 
 
         <h1 id="domingo">
@@ -3661,7 +3715,7 @@ Universidad Nacional de Colombia
 
         <h2 id="quinta-expert">
         Apresentação de pesquisadores experientes /
-        Presentación de investigadores experimentados /
+        Presentaciones de expertos /
         <i>Experts' oral communications</i>
         </h2>
         <div class="lista">
@@ -3860,7 +3914,7 @@ Universidad de Buenos Aires
 
         <h2 id="sexta-expert">
         Apresentação de pesquisadores experientes /
-        Presentación de investigadores experimentados /
+        Presentaciones de expertos /
         <i>Experts' oral communications</i>
         </h2>
         <div class="lista">
