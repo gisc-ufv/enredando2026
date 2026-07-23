@@ -332,26 +332,57 @@ img{
 
 <script>
 
-function buscar(){
+function buscar() {
 
-    let termo = document
+    const termo = document
         .getElementById("campoBusca")
         .value
-        .toLowerCase();
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .trim();
 
-    let itens = document.querySelectorAll(".item");
+    // Mostrar/esconder cada item
+    document.querySelectorAll(".item").forEach(item => {
 
-    itens.forEach(function(item){
+        const texto = item.textContent
+            .toLowerCase()
+            .replace(/\s+/g, " ")
+            .trim();
 
-        let texto = item.innerText.toLowerCase();
-
-        if(texto.includes(termo)){
-            item.style.display = "";
-        } else {
-            item.style.display = "none";
-        }
-
+        item.style.display = texto.includes(termo) ? "" : "none";
     });
+
+    // Mostrar/esconder cada modalidade
+    document.querySelectorAll(".modalidade").forEach(modalidade => {
+
+        let temItem = false;
+
+        modalidade.querySelectorAll(".item").forEach(item => {
+            if (item.style.display !== "none")
+                temItem = true;
+        });
+
+        modalidade.style.display = temItem ? "" : "none";
+    });
+
+    // Nunca esconder a seção de informações
+    document.querySelectorAll(".informacoes").forEach(info => {
+        info.style.display = "";
+    });
+
+    // Mostrar/esconder cada dia
+    document.querySelectorAll(".dia").forEach(dia => {
+
+        let temModalidade = false;
+
+        dia.querySelectorAll(":scope > .modalidade").forEach(modalidade => {
+            if (modalidade.style.display !== "none")
+                temModalidade = true;
+        });
+
+        dia.style.display = temModalidade ? "" : "none";
+    });
+
 }
 
 </script>
@@ -408,7 +439,7 @@ Auditório da Biblioteca Central da Universidade Federal de Viçosa (UFV)<br>
 </div>
 
 <div class="geracao">
-Gerado em / Generado el / Generated on: 22/07/2026 22:46 (GMT−3)
+Gerado em / Generado el / Generated on: 22/07/2026 23:09 (GMT−3)
 </div>
 
 </header>
@@ -438,10 +469,12 @@ Gerado em / Generado el / Generated on: 22/07/2026 22:46 (GMT−3)
 </div>
 
 
+        <section class="dia">
         <h1 id="domingo">
         26/07 — Domingo / Domingo / <i>Sunday</i>
         </h1>
         <nav class="menu-sessoes"><a href="#domingo-opening">Opening</a><a href="#domingo-social">Social</a></nav>
+        <section class="informacoes">
         <div class="lista">
             <div class="item">
 
@@ -489,7 +522,9 @@ Gerado em / Generado el / Generated on: 22/07/2026 22:46 (GMT−3)
 
             </div>
         </div>
+        </section>
         
+        <section class="modalidade">
         <h2 id="domingo-opening">
         Palestra de abertura /
         Conferencia de apertura /
@@ -528,7 +563,8 @@ Universidad de Zaragoza (UZ)
 </div>
 
 </div>
-</div>
+</div></section>
+        <section class="modalidade">
         <h2 id="domingo-social">
         Social Events / Eventos Sociais / Eventos Sociales</h2>
 
@@ -597,17 +633,21 @@ Universidad de Zaragoza (UZ)
 
         </div>
     </div>
+    </section>
         
 <div class="voltar">
 <a href="#domingo">⬆ Início do dia</a>
 &nbsp;&nbsp;
 <a href="#topo">⬆ Topo do programa</a>
 </div>
+</section>
 
+        <section class="dia">
         <h1 id="segunda">
         27/07 — Segunda-feira / Lunes / <i>Monday</i>
         </h1>
         <nav class="menu-sessoes"><a href="#segunda-lecture">Lecture</a><a href="#segunda-young">Young</a></nav>
+        <section class="modalidade">
         <h2 id="segunda-lecture">
         Palestra /
         Conferencia /
@@ -760,7 +800,8 @@ Universidade Estadual de Campinas (Unicamp)
 </div>
 
 </div>
-</div>
+</div></section>
+        <section class="modalidade">
         <h2 id="segunda-young">
         Apresentações de jovens pesquisadores /
         Presentaciones de jóvenes investigadores /
@@ -964,17 +1005,20 @@ Universidade Federal de Pernambuco (UFPE)
 </div>
 
 </div>
-</div>
+</div></section>
 <div class="voltar">
 <a href="#segunda">⬆ Início do dia</a>
 &nbsp;&nbsp;
 <a href="#topo">⬆ Topo do programa</a>
 </div>
+</section>
 
+        <section class="dia">
         <h1 id="terca">
         28/07 — Terça-feira / Martes / <i>Tuesday</i>
         </h1>
         <nav class="menu-sessoes"><a href="#terca-lecture">Lecture</a><a href="#terca-lightning">Lightning</a><a href="#terca-poster">Poster</a></nav>
+        <section class="modalidade">
         <h2 id="terca-lecture">
         Palestra /
         Conferencia /
@@ -1085,7 +1129,8 @@ Instituto de Física Teórica/UNESP
 </div>
 
 </div>
-</div>
+</div></section>
+        <section class="modalidade">
         <h2 id="{id_dia[dia]}-lightning">
         Lightning Talks
         </h2>
@@ -1245,7 +1290,8 @@ Instituto de Física Teórica/UNESP
         </div>
 
         </div>
-        </div>
+        </div></section>
+        <section class="modalidade">
         <h2 id="terca-poster">
         Sessão de pôsteres /
         Sesión de pósteres /
@@ -2307,17 +2353,20 @@ Universidade de São Paulo (USP)
 </div>
 
 </div>
-</div>
+</div></section>
 <div class="voltar">
 <a href="#terca">⬆ Início do dia</a>
 &nbsp;&nbsp;
 <a href="#topo">⬆ Topo do programa</a>
 </div>
+</section>
 
+        <section class="dia">
         <h1 id="quarta">
         29/07 — Quarta-feira / Miércoles / <i>Wednesday</i>
         </h1>
         <nav class="menu-sessoes"><a href="#quarta-lecture">Lecture</a><a href="#quarta-young">Young</a><a href="#quarta-social">Social</a></nav>
+        <section class="modalidade">
         <h2 id="quarta-lecture">
         Palestra /
         Conferencia /
@@ -2479,7 +2528,8 @@ CNRS
 </div>
 
 </div>
-</div>
+</div></section>
+        <section class="modalidade">
         <h2 id="quarta-young">
         Apresentações de jovens pesquisadores /
         Presentaciones de jóvenes investigadores /
@@ -2683,7 +2733,8 @@ Universitat Politècnica de Catalunya
 </div>
 
 </div>
-</div>
+</div></section>
+        <section class="modalidade">
         <h2 id="quarta-social">
         Social Events / Eventos Sociais / Eventos Sociales
         </h2>
@@ -2751,17 +2802,21 @@ Universitat Politècnica de Catalunya
 
             </div>
         </div>
+        </section>
         
 <div class="voltar">
 <a href="#quarta">⬆ Início do dia</a>
 &nbsp;&nbsp;
 <a href="#topo">⬆ Topo do programa</a>
 </div>
+</section>
 
+        <section class="dia">
         <h1 id="quinta">
         30/07 — Quinta-feira / Jueves / <i>Thursday</i>
         </h1>
         <nav class="menu-sessoes"><a href="#quinta-lecture">Lecture</a><a href="#quinta-poster">Poster</a><a href="#quinta-expert">Expert</a></nav>
+        <section class="modalidade">
         <h2 id="quinta-lecture">
         Palestra /
         Conferencia /
@@ -2899,7 +2954,8 @@ University of Exeter
 </div>
 
 </div>
-</div>
+</div></section>
+        <section class="modalidade">
         <h2 id="quinta-poster">
         Sessão de pôsteres /
         Sesión de pósteres /
@@ -3928,7 +3984,8 @@ Universidad Nacional de Colombia
 </div>
 
 </div>
-</div>
+</div></section>
+        <section class="modalidade">
         <h2 id="quinta-expert">
         Apresentação de especialistas /
         Presentaciones de expertos /
@@ -4033,17 +4090,20 @@ Universidade Federal Fluminense (UFF)
 </div>
 
 </div>
-</div>
+</div></section>
 <div class="voltar">
 <a href="#quinta">⬆ Início do dia</a>
 &nbsp;&nbsp;
 <a href="#topo">⬆ Topo do programa</a>
 </div>
+</section>
 
+        <section class="dia">
         <h1 id="sexta">
         31/07 — Sexta-feira / Viernes / <i>Friday</i>
         </h1>
         <nav class="menu-sessoes"><a href="#sexta-lecture">Lecture</a><a href="#sexta-expert">Expert</a></nav>
+        <section class="modalidade">
         <h2 id="sexta-lecture">
         Palestra /
         Conferencia /
@@ -4121,7 +4181,8 @@ Universidad de Buenos Aires
 </div>
 
 </div>
-</div>
+</div></section>
+        <section class="modalidade">
         <h2 id="sexta-expert">
         Apresentação de especialistas /
         Presentaciones de expertos /
@@ -4226,12 +4287,13 @@ Universidade Estadual Paulista "Júlio de Mesquita Filho" (Unesp)
 </div>
 
 </div>
-</div>
+</div></section>
 <div class="voltar">
 <a href="#sexta">⬆ Início do dia</a>
 &nbsp;&nbsp;
 <a href="#topo">⬆ Topo do programa</a>
 </div>
+</section>
 
 
 </body>
