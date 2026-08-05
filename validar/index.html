@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Validação de Certificado</title>
+    <!-- Importa a biblioteca de criptografia para o navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body { font-family: 'Roboto', sans-serif; text-align: center; margin-top: 50px; }
+        input { padding: 10px; font-size: 16px; width: 250px; text-transform: uppercase; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        #resultado { margin-top: 30px; font-size: 18px; padding: 20px; border-radius: 8px; display: inline-block; }
+        .sucesso { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .erro { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+    <h2>Validar Certificado</h2>
+    <p>Digite o código impresso no rodapé do certificado:</p>
+
+    <input type="text" id="inputCodigo" placeholder="Ex: 4F2C-8B1A-9D3E">
+    <button onclick="validar()">Verificar</button>
+
+    <div id="resultado" style="display:none;"></div>
+
+    <script>
+        async function validar() {
+            const codigo = document.getElementById("inputCodigo").value.trim().toUpperCase();
+            const divResultado = document.getElementById("resultado");
+
+            if(!codigo) return;
+
+            divResultado.style.display = "none";
+            divResultado.className = "";
+            divResultado.innerHTML = "Buscando...";
+            divResultado.style.display = "inline-block";
+
+            // 1. O JS calcula qual é o nome do arquivo (o Hash do código)
+            const hashArquivo = CryptoJS.SHA256(codigo).toString();
+
+            try {
+                // 2. Tenta baixar o arquivo do GitHub Pages
+                const resposta = await fetch(`api_validacao/${hashArquivo}.txt`);
+
+                if (!resposta.ok) {
+                    throw new Error("Certificado não encontrado. Verifique se digitou o código corretamente.");
+                }
+
+                const textoCriptografado = await resposta.text();
+
+                // 3. Descriptografa os dados usando o código digitado
+                const chave = CryptoJS.SHA256(codigo);
+                const iv = CryptoJS.lib.WordArray.create(new Uint8Array(16)); // IV de zeros
+
+                const bytesDescriptografados = CryptoJS.AES.decrypt(textoCriptografado, chave, {
+                    iv: iv,
+                    mode: CryptoJS.mode.CBC
+                });
+
+                const jsonTexto = bytesDescriptografados.toString(CryptoJS.enc.Utf8);
+                const dados = JSON.parse(jsonTexto);
+
+                // 4. Mostra o sucesso!
+                divResultado.className = "sucesso";
+
+                // Monta o HTML base
+                let htmlSucesso = `
+                    <strong>✅ Certificado Autêntico!</strong><br><br>
+                    <strong>Nome:</strong> ${dados.nome}<br>
+                    <strong>Tipo:</strong> ${dados.tipo}<br>
+                    <strong>Evento:</strong> ${dados.evento}<br>
+                `;
+
+                // Adiciona os campos extras dinamicamente se eles existirem no JSON
+                if (dados.titulo) {
+                    htmlSucesso += `<strong>Título do Trabalho:</strong> ${dados.titulo}<br>`;
+                }
+                if (dados.autores) {
+                    htmlSucesso += `<strong>Autores:</strong> ${dados.autores}<br>`;
+                }
+                if (dados.formato) {
+                    htmlSucesso += `<strong>Formato:</strong> ${dados.formato}<br>`;
+                }
+                if (dados.titulo_palestra) {
+                    htmlSucesso += `<strong>Tema da Palestra:</strong> ${dados.titulo_palestra}<br>`;
+                }
+
+                divResultado.innerHTML = htmlSucesso;
+
+            } catch (erro) {
+                divResultado.className = "erro";
+                divResultado.innerHTML = `<strong>❌ Erro:</strong> ${erro.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
